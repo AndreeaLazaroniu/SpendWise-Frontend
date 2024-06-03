@@ -16,8 +16,11 @@ import {
   import { CategorizedProductModel } from "../../api/Models/CategorizedProductModel";
   import { useNavigate } from "react-router-dom";
   
+  
   import "./UploadReceipt.css";
   import { SaveCartModel } from "../../api/Models/SaveCartModel";
+import { ScannedProduct } from "../shared/types/ScannedProduct";
+import { ProductItem } from "./ProductItem";
 
 export const UploadReceipt: FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -30,6 +33,11 @@ export const UploadReceipt: FC = () => {
       CategorizedProduct[]
     >([]);
     const navigate = useNavigate();
+
+    const handleCategoryChange = (
+        product : ScannedProduct,
+        newCategoryId: number
+     ) => {};
   
     const fetchCategories = async () => {
       try {
@@ -117,17 +125,12 @@ export const UploadReceipt: FC = () => {
                     </Typography>
                     <Box className={"products-list"}>
                       {category.products.map((product, index) => (
-                        <Box key={index} className={"product-box"}>
-                          <Typography className={"product-name"}>
-                            {product.name}
-                          </Typography>
-                          <Typography className={"product-quantity"}>
-                            Quantity: {product.quantity}
-                          </Typography>
-                          <Typography className={"product-price"}>
-                            Price: ${product.price.toFixed(2)}
-                          </Typography>
-                        </Box>
+                        <ProductItem
+                          product={product}
+                          categories={categories}
+                          currentCategoryId={category.id}
+                          onCategoryChange={handleCategoryChange}
+                        />
                       ))}
                     </Box>
                   </Box>

@@ -75,14 +75,14 @@ export const ScanReceiptPopup: FC<ScanReceiptPopupProps> = ({
       const categorizedProducts: CategorizedProduct[] = res.map(
         (model: any) => {
           return {
-            id: model.Id,
-            name: model.Name,
-            products: model.Products.map(
+            id: model.id,
+            name: model.name,
+            products: model.products.map(
               (product: any) =>
                 ({
-                  name: product["nume produs"], //"name"
-                  quantity: product["cantitate"], //"quantity"
-                  price: product["pret"], //"price"
+                  name: product.name, //"name"
+                  quantity: product.quantity, //"quantity"
+                  price: product.price, //"price"
                 } as ScannedProduct)
             ),
           };

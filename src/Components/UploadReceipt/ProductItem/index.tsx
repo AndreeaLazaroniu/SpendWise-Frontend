@@ -1,0 +1,54 @@
+import React, { FC } from 'react';
+import "./ProductItem.css";
+import { ScannedProduct } from '../../shared/types/ScannedProduct';
+import { Category } from '../../shared/types/Category';
+
+import {
+    Box,
+    Select,
+    MenuItem,
+    SelectChangeEvent,
+    Typography,
+  } from "@mui/material";
+import { on } from 'events';
+
+interface ProductItemProps {
+    product: ScannedProduct;
+    categories: Category[];
+    currentCategoryId: number;
+    onCategoryChange: (product: ScannedProduct, newCategoryId: number) => void;
+}
+
+export const ProductItem: FC<ProductItemProps> = ({
+    product,
+    categories,
+    currentCategoryId,
+    onCategoryChange,
+}: ProductItemProps) => {
+    const handleCategoryChange = (e: SelectChangeEvent<number>) => {
+        onCategoryChange(product, e.target.value as number);
+    };
+    return (
+        <Box className = {"product-box"}>
+            <Typography className = {"product-name"}>{product.name}</Typography>
+            <Typography className = {"product-quantity"}>
+                Quantity: {product.quantity}
+            </Typography>
+            <Typography className = {"product-price"}>
+                Price : ${product.price.toFixed(2)}
+            </Typography>
+            <Select
+            value={currentCategoryId}
+            onChange={handleCategoryChange}
+            className={"category-select"}
+            >
+                {categories.map((category) => (
+                    <MenuItem key={category.id} value={category.id}>
+                        {category.name}
+                    </MenuItem>
+                ))}
+
+            </Select>
+        </Box>
+    );
+};
