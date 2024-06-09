@@ -19,8 +19,8 @@ import {
   
   import "./UploadReceipt.css";
   import { SaveCartModel } from "../../api/Models/SaveCartModel";
-import { ScannedProduct } from "../shared/types/ScannedProduct";
-import { ProductItem } from "./ProductItem";
+  import { ProductItem } from "./ProductItem";
+  import { ScannedProduct } from "../shared/types/ScannedProduct";
 
 export const UploadReceipt: FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -37,7 +37,37 @@ export const UploadReceipt: FC = () => {
     const handleCategoryChange = (
         product : ScannedProduct,
         newCategoryId: number
-     ) => {};
+     ) => {
+      const filterCategorizedPrducts = categorizedProducts.map((el) => {
+        el.products = el.products.filter((el) => el.name !== product.name);
+        return el;
+      });
+
+      if(!filterCategorizedPrducts.find((el) => el.id === newCategoryId)){
+        const newCategory = categories.find((el) => el.id === newCategoryId);
+
+        if(!newCategory) return;
+
+        const newCategorizedProduct: CategorizedProduct = {
+          id: newCategory.id!,
+          name: newCategory.name,
+          products: []
+        };
+
+        filterCategorizedPrducts.push(newCategorizedProduct);
+      }
+
+      const newCategorizedProducts = filterCategorizedPrducts.map((el) => {
+        if(el.id === newCategoryId){
+          el.products = [...el.products, product];
+        }
+
+        return el;
+      });
+
+      setCategorizedProducts(newCategorizedProducts);
+
+    };
   
     const fetchCategories = async () => {
       try {
